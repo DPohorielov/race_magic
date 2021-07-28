@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "904604601783",
+    "project_id": "race-magic",
+    "storage_bucket": "race-magic.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904604601783:android:99a6906327737dfb456c32",
+        "android_client_info": {
+          "package_name": "com.dev.mrl.race_magic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "904604601783-estlu4rm6gcih8oe24q37r6i2dc1354o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMlAL9glJNWZi_AbzYw5gPNV89Qo6nsGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "904604601783-estlu4rm6gcih8oe24q37r6i2dc1354o.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "904604601783-scn59a6penji8vd83kd56hagnpru0oa7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dev.mrl.raceMagic"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
