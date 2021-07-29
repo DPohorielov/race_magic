@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:race_magic/api/repository.dart';
 import 'package:race_magic/model/entity/race_entity.dart';
 import 'package:race_magic/widget/custom_form_field.dart';
+import 'package:race_magic/widget/view_race_page.dart';
 
 class AddRaceListPage extends StatelessWidget {
   @override
@@ -65,7 +66,7 @@ class _AddRaceFormState extends State<AddRaceForm> {
                   isLabelEnabled: false,
                   controller: _titleController,
                   keyboardType: TextInputType.text,
-                  inputAction: TextInputAction.next,
+                  inputAction: TextInputAction.done,
                   label: 'Title',
                   hint: 'Enter race title',
                 ),
@@ -93,14 +94,20 @@ class _AddRaceFormState extends State<AddRaceForm> {
                     _isProcessing = true;
                   });
 
-                  await Repository.addRace(
-                      RaceEntity(name: _titleController.text));
+                  String id = (await Repository.addRace(
+                          RaceEntity(name: _titleController.text)))
+                      .id;
+                  final RaceEntity entity = await Repository.getRace(id);
 
                   setState(() {
                     _isProcessing = false;
                   });
 
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => ViewRacePage(race: entity),
+                    ),
+                  );
                 },
                 child: const Padding(
                   padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
