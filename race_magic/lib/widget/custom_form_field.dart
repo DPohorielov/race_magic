@@ -12,6 +12,8 @@ class CustomFormField extends StatelessWidget {
     this.isCapitalized = false,
     this.maxLines = 1,
     this.isLabelEnabled = true,
+    this.enabled = true,
+    this.focusNode,
   })  : _emailController = controller,
         _keyboardtype = keyboardType,
         _inputAction = inputAction,
@@ -28,10 +30,14 @@ class CustomFormField extends StatelessWidget {
   final bool isCapitalized;
   final int maxLines;
   final bool isLabelEnabled;
+  final bool enabled;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: enabled,
+      focusNode: focusNode,
       maxLines: maxLines,
       controller: _emailController,
       keyboardType: _keyboardtype,

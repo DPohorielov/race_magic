@@ -19,6 +19,7 @@ dependencies:
   json_annotation: ^4.0.1
 
   intl: ^0.17.0
+  loader_overlay: ^2.0.2
 
   cupertino_icons: ^1.0.3
 

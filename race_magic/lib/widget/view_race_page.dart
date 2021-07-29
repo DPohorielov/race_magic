@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:race_magic/api/repository.dart';
 import 'package:race_magic/model/entity/race_entity.dart';
 import 'package:race_magic/widget/add_result_page.dart';
+import 'package:race_magic/widget/view_number_page.dart';
 
 class ViewRacePage extends StatefulWidget {
   final RaceEntity race;
@@ -18,52 +20,53 @@ class _ViewRacePageState extends State<ViewRacePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Race: ${widget.race.name}'),
-        actions: [
-          if (_isDeleting)
-            const Padding(
-              padding: EdgeInsets.only(
-                top: 10.0,
-                bottom: 10.0,
-                right: 16.0,
+    return LoaderOverlay(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Race: ${widget.race.name}'),
+          actions: [
+            if (_isDeleting)
+              const Padding(
+                padding: EdgeInsets.only(
+                  top: 10.0,
+                  bottom: 10.0,
+                  right: 16.0,
+                ),
+                child: CircularProgressIndicator(),
+              )
+            else
+              IconButton(
+                icon: const Icon(
+                  Icons.delete,
+                  size: 32,
+                ),
+                onPressed: () => _showDeleteDialog(),
               ),
-              child: CircularProgressIndicator(
-              ),
-            )
-          else
-            IconButton(
-              icon: const Icon(
-                Icons.delete,
-                size: 32,
-              ),
-              onPressed: () => _showDeleteDialog(),
-            ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => AddResultPage(raceId: widget.race.id),
-            ),
-          );
-        },
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 32,
+          ],
         ),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: 16.0,
-            right: 16.0,
-            bottom: 20.0,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => AddResultPage(raceId: widget.race.id),
+              ),
+            );
+          },
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 32,
           ),
-          child: NumbersList(raceId: widget.race.id),
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              left: 16.0,
+              right: 16.0,
+              bottom: 20.0,
+            ),
+            child: NumbersList(raceId: widget.race.id),
+          ),
         ),
       ),
     );
@@ -96,7 +99,6 @@ class _ViewRacePageState extends State<ViewRacePage> {
       builder: (BuildContext context) => alert,
     ).then((value) async {
       if (value is bool && value) {
-
         setState(() {
           _isDeleting = true;
         });
@@ -127,7 +129,7 @@ class NumbersList extends StatelessWidget {
           return const Text('Something went wrong');
         } else if (snapshot.hasData || snapshot.data != null) {
           return ListView.separated(
-            separatorBuilder: (context, index) => const SizedBox(height: 16.0),
+            separatorBuilder: (context, index) => const Divider(),
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final int number = snapshot.data!.elementAt(index);
@@ -140,11 +142,23 @@ class NumbersList extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  /*      onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ViewNumberPage(number: number),
-                    ),
-                  ),*/
+                  onTap: () async {
+                    try {
+                      context.loaderOverlay.show();
+                      final results =
+                          await Repository.getResultsByNumber(raceId, number);
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ViewNumberPage(
+                            results: results,
+                            raceId: raceId,
+                          ),
+                        ),
+                      );
+                    } catch (_) {} finally {
+                      context.loaderOverlay.hide();
+                    }
+                  },
                   title: Text(
                     '$number',
                     maxLines: 1,

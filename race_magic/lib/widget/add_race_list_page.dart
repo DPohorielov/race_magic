@@ -94,7 +94,7 @@ class _AddRaceFormState extends State<AddRaceForm> {
                     _isProcessing = true;
                   });
 
-                  String id = (await Repository.addRace(
+                  final String id = (await Repository.addRace(
                           RaceEntity(name: _titleController.text)))
                       .id;
                   final RaceEntity entity = await Repository.getRace(id);

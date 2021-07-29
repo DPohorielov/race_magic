@@ -9,7 +9,7 @@ class Repository {
 
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static final CollectionReference<Map<String, dynamic>> _races =
-  _firestore.collection('races');
+      _firestore.collection('races');
 
   static CollectionReference<Map<String, dynamic>> _results(String raceId) =>
       _races.doc(raceId).collection('results');
@@ -45,8 +45,16 @@ class Repository {
     return _races.add(json);
   }
 
-  static Future<void> addResult(ResultEntity resultEntity,
-      String raceId) async {
+  static Future<void> deleteRacer(int number, String id) async {
+    final snapshots =
+        await _results(id).where('number', isEqualTo: number).get();
+    for (final doc in snapshots.docs) {
+      await doc.reference.delete();
+    }
+  }
+
+  static Future<void> addResult(
+      ResultEntity resultEntity, String raceId) async {
     final Map<String, dynamic> json = resultEntity.toJson();
 
     await _results(raceId)
@@ -79,12 +87,18 @@ class Repository {
       return SplayTreeSet.from(
         snapshot.docs.map((document) {
           final Map<String, dynamic> json = document.data();
-          return ResultEntity
-              .fromJson(json)
-              .number;
+          return ResultEntity.fromJson(json).number;
         }).toSet(),
-            (a, b) => a.compareTo(b),
+        (a, b) => a.compareTo(b),
       );
     });
+  }
+
+  static Future<List<ResultEntity>> getResultsByNumber(
+      String raceId, int number) async {
+    return (await _results(raceId).where('number', isEqualTo: number).get())
+        .docs
+        .map((e) => ResultEntity.fromJson(e.data()))
+        .toList();
   }
 }

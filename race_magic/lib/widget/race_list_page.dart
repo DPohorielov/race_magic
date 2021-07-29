@@ -50,7 +50,7 @@ class RaceList extends StatelessWidget {
           return const Text('Something went wrong');
         } else if (snapshot.hasData || snapshot.data != null) {
           return ListView.separated(
-            separatorBuilder: (context, index) => const SizedBox(height: 16.0),
+            separatorBuilder: (context, index) => const Divider(),
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final RaceEntity entity = snapshot.data![index];
