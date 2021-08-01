@@ -10,7 +10,7 @@ class AddRaceListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Race'),
+        title: const Text('Добавить Соревнование'),
       ),
       body: const SafeArea(
         child: Padding(
@@ -54,7 +54,7 @@ class _AddRaceFormState extends State<AddRaceForm> {
               children: [
                 const SizedBox(height: 24.0),
                 const Text(
-                  'Title',
+                  'Название',
                   style: TextStyle(
                     fontSize: 22.0,
                     letterSpacing: 1,
@@ -67,8 +67,8 @@ class _AddRaceFormState extends State<AddRaceForm> {
                   controller: _titleController,
                   keyboardType: TextInputType.text,
                   inputAction: TextInputAction.done,
-                  label: 'Title',
-                  hint: 'Enter race title',
+                  label: 'Название',
+                  hint: 'Введите название соревнований',
                 ),
               ],
             ),
@@ -112,7 +112,7 @@ class _AddRaceFormState extends State<AddRaceForm> {
                 child: const Padding(
                   padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
                   child: Text(
-                    'SAVE',
+                    'СОЗДАТЬ',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -126,4 +126,6 @@ class _AddRaceFormState extends State<AddRaceForm> {
       ),
     );
   }
+
+
 }

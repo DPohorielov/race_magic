@@ -3,6 +3,8 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:race_magic/model/entity/race_entity.dart';
 import 'package:race_magic/model/entity/result_entity.dart';
+import 'package:race_magic/model/enum/categories.dart';
+import 'package:race_magic/model/enum/stages.dart';
 
 class Repository {
   Repository();
@@ -59,7 +61,8 @@ class Repository {
 
     await _results(raceId)
         .where('number', isEqualTo: resultEntity.number)
-        .where('stage', isEqualTo: resultEntity.stage)
+        .where('stage', isEqualTo: resultEntity.stage.val)
+        .where('category', isEqualTo: resultEntity.category.val)
         .where('isStart', isEqualTo: resultEntity.isStart)
         .get()
         .then((event) async {

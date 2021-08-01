@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:race_magic/api/repository.dart';
 import 'package:race_magic/model/entity/result_entity.dart';
+import 'package:race_magic/model/enum/stages.dart';
 
 class ViewNumberPage extends StatefulWidget {
   final List<ResultEntity> results;
@@ -20,7 +21,7 @@ class _ViewNumberPageState extends State<ViewNumberPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Map<int, List<ResultEntity>> stagesMap = {};
+    final Map<Stages, List<ResultEntity>> stagesMap = {};
     for (final ResultEntity result in widget.results) {
       if (stagesMap[result.stage] == null) {
         stagesMap[result.stage] = [result];
@@ -30,8 +31,8 @@ class _ViewNumberPageState extends State<ViewNumberPage> {
     }
 
     final List<StageResult> stages = [];
-    for (int i = 1; i <= 3; i++) {
-      final result = StageResult.fromList(i, stagesMap[i]);
+    for (int i = 0; i < Stages.values.length; i++) {
+      final result = StageResult.fromList(Stages.values[i], stagesMap[Stages.values[i]]);
       stages.add(result);
     }
 
@@ -45,8 +46,8 @@ class _ViewNumberPageState extends State<ViewNumberPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Racer# ${widget.results.first.number}'),
-        actions: [
+        title: Text('Участник# ${widget.results.first.number}'),
+    /*    actions: [
           if (_isDeleting)
             const Padding(
               padding: EdgeInsets.only(
@@ -64,7 +65,7 @@ class _ViewNumberPageState extends State<ViewNumberPage> {
               ),
               onPressed: () => _showDeleteDialog(),
             ),
-        ],
+        ],*/
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -75,6 +76,7 @@ class _ViewNumberPageState extends State<ViewNumberPage> {
               children: [
                 ListView.separated(
                     shrinkWrap: true,
+                    physics:  const NeverScrollableScrollPhysics(),
                     separatorBuilder: (context, index) => const Divider(),
                     itemCount: stages.length,
                     itemBuilder: (context, index) {
@@ -83,48 +85,45 @@ class _ViewNumberPageState extends State<ViewNumberPage> {
                       return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(height: 24.0),
                             Text(
-                              'Stage ${stageResult.stage}',
+                              stageResult.stage.name,
                               style: const TextStyle(
-                                fontSize: 24.0,
+                                fontSize: 20.0,
                                 letterSpacing: 1,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            if (time != null) const SizedBox(height: 10.0),
                             if (time != null)
                               Text(
-                                'Duration: ${_printDuration(time)}',
+                                'Длительность: ${_printDuration(time)}',
                                 style: const TextStyle(
-                                  fontSize: 18.0,
+                                  fontSize: 16.0,
                                   letterSpacing: 1,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            const SizedBox(height: 15.0),
+                            const SizedBox(height: 6.0),
                             Text(
-                              'Start Time: ${stageResult.start == null ? '' : ' ${buildDateString(stageResult.start!)}'}',
+                              'Время Старта: ${stageResult.start == null ? '' : ' ${buildDateString(stageResult.start!)}'}',
                               style: const TextStyle(
-                                fontSize: 18.0,
+                                fontSize: 16.0,
                                 letterSpacing: 1,
                               ),
                             ),
-                            const SizedBox(height: 15.0),
+                            const SizedBox(height: 6.0),
                             Text(
-                              'Finish Time: ${stageResult.finish == null ? '' : ' ${buildDateString(stageResult.finish!)}'}',
+                              'Время Финиша: ${stageResult.finish == null ? '' : ' ${buildDateString(stageResult.finish!)}'}',
                               style: const TextStyle(
-                                fontSize: 18.0,
+                                fontSize: 16.0,
                                 letterSpacing: 1,
                               ),
                             ),
-                            const SizedBox(height: 15.0),
                           ]);
                     }),
                 const Divider(),
-                const SizedBox(height: 24.0),
+                const SizedBox(height: 6.0),
                 Text(
-                  'Total Duration: ${_printDuration(total)}',
+                  'Общая Длительность: ${_printDuration(total)}',
                   style: const TextStyle(
                     fontSize: 24.0,
                     letterSpacing: 1,
@@ -205,13 +204,13 @@ String buildDateString(DateTime time) {
 }
 
 class StageResult {
-  final int stage;
+  final Stages stage;
   final DateTime? start;
   final DateTime? finish;
 
   StageResult(this.stage, {this.start, this.finish});
 
-  factory StageResult.fromList(int stage, List<ResultEntity>? list) {
+  factory StageResult.fromList(Stages stage, List<ResultEntity>? list) {
     DateTime? start;
     DateTime? finish;
 

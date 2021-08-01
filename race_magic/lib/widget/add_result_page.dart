@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:race_magic/model/enum/categories.dart';
+import 'package:race_magic/model/enum/stages.dart';
 import 'package:race_magic/widget/add_result_time_page.dart';
 
 class AddResultPage extends StatelessWidget {
@@ -14,14 +16,14 @@ class AddResultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Result'),
+        title: const Text('Добавить Замер'),
       ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(
-            left: 16.0,
-            right: 16.0,
-            bottom: 20.0,
+            left: 6.0,
+            right: 6.0,
+            bottom: 6.0,
           ),
           child: AddResultForm(raceId),
         ),
@@ -40,135 +42,142 @@ class AddResultForm extends StatefulWidget {
 }
 
 class _AddResultFormState extends State<AddResultForm> {
-  int? _stage;
+  Stages? _stage;
+  Categories? _category;
   bool? _isStart;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 8.0,
-            right: 8.0,
-            bottom: 24.0,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 24.0),
-              const Text(
-                'Select stage',
-                style: TextStyle(
-                  fontSize: 22.0,
-                  letterSpacing: 1,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8.0),
-              _buildStages(),
-              const SizedBox(height: 34.0),
-              const Text(
-                'Select type',
-                style: TextStyle(
-                  fontSize: 22.0,
-                  letterSpacing: 1,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8.0),
-              _buildTypes(),
-            ],
-          ),
-        ),
-        SizedBox(
-          width: double.maxFinite,
-          child: ElevatedButton(
-            style: ButtonStyle(
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-            onPressed: _isStart == null || _stage == null
-                ? null
-                : () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => AddResultTimePage(
-                          raceId: widget.raceId,
-                          isStart: _isStart!,
-                          stage: _stage!,
-                        ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Row(crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+            Flexible(
+              flex: 10,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 6.0),
+                    const Text(
+                      'Участок',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        letterSpacing: 1,
+                        fontWeight: FontWeight.bold,
                       ),
-                    );
-                  },
-            child: const Padding(
-              padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
-              child: Text(
-                'NEXT',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
+                    ),
+                    _buildStages(),
+                    const SizedBox(height: 6.0),
+                    const Text(
+                      'Тип',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        letterSpacing: 1,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    _buildTypes(),
+                  ],
+                ),
+              ),
+              Flexible(
+                flex: 9,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 6.0),
+                    const Text(
+                      'Категория',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        letterSpacing: 1,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    _buildCategories(),
+                  ],
+                ),
+              ),
+            ]),
+          SizedBox(
+            width: double.maxFinite,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              onPressed: _isStart == null || _stage == null || _category == null
+                  ? null
+                  : () => _showViewDialog(),
+              child: const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  'ДАЛЬШЕ',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Widget _buildStages() {
-    return Column(
-      children: <Widget>[
-        ListTile(
-          title: const Text('Stage 1'),
-          leading: Radio<int>(
-            value: 1,
-            groupValue: _stage,
-            onChanged: (int? value) {
-              setState(() {
-                _stage = value;
-              });
-            },
-          ),
-        ),
-        ListTile(
-          title: const Text('Stage 2'),
-          leading: Radio<int>(
-            value: 2,
-            groupValue: _stage,
-            onChanged: (int? value) {
-              setState(() {
-                _stage = value;
-              });
-            },
-          ),
-        ),
-        ListTile(
-          title: const Text('Stage 3'),
-          leading: Radio<int>(
-            value: 3,
-            groupValue: _stage,
-            onChanged: (int? value) {
-              setState(() {
-                _stage = value;
-              });
-            },
-          ),
-        ),
-      ],
-    );
+    return ListView.builder(
+        itemCount: Stages.values.length,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, i) {
+          return ListTile(
+            title: Text(Stages.values[i].name),
+            leading: Radio<Stages>(
+              value: Stages.values[i],
+              groupValue: _stage,
+              onChanged: (Stages? value) {
+                setState(() {
+                  _stage = value;
+                });
+              },
+            ),
+          );
+        });
+  }
+
+  Widget _buildCategories() {
+    return ListView.builder(
+        itemCount: Categories.values.length,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, i) {
+          return ListTile(
+            title: Text(Categories.values[i].name),
+            leading: Radio<Categories>(
+              value: Categories.values[i],
+              groupValue: _category,
+              onChanged: (Categories? value) {
+                setState(() {
+                  _category = value;
+                });
+              },
+            ),
+          );
+        });
   }
 
   Widget _buildTypes() {
     return Column(
       children: <Widget>[
         ListTile(
-          title: const Text('Start'),
+          title: const Text('Старт'),
           leading: Radio<bool>(
             value: true,
             groupValue: _isStart,
@@ -180,7 +189,7 @@ class _AddResultFormState extends State<AddResultForm> {
           ),
         ),
         ListTile(
-          title: const Text('Finish'),
+          title: const Text('Финиш'),
           leading: Radio<bool>(
             value: false,
             groupValue: _isStart,
@@ -193,5 +202,49 @@ class _AddResultFormState extends State<AddResultForm> {
         ),
       ],
     );
+  }
+
+  void _showViewDialog() {
+    final Widget cancelButton = TextButton(
+      onPressed: () {
+        Navigator.of(context).pop(false);
+      },
+      child: const Text('Отмена'),
+    );
+    final Widget continueButton = TextButton(
+      onPressed: () {
+        Navigator.of(context).pop(true);
+      },
+      child: const Text('Продолжить'),
+    );
+
+    final AlertDialog alert = AlertDialog(
+      title: Text('Вы действительно хотите сделать замер '
+          '${_isStart! ? 'Старта' : 'Финиша'}  '
+          '${_stage!.name} '
+          'категория ${_category!.name}?'),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => alert,
+    ).then((value) async {
+      if (value is bool && value) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => AddResultTimePage(
+              raceId: widget.raceId,
+              isStart: _isStart!,
+              stage: _stage!,
+              category: _category!,
+            ),
+          ),
+        );
+      }
+    });
   }
 }

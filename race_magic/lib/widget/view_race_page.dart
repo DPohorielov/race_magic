@@ -23,7 +23,7 @@ class _ViewRacePageState extends State<ViewRacePage> {
     return LoaderOverlay(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Race: ${widget.race.name}'),
+          title: Text('Соревнование: ${widget.race.name}'),
           actions: [
             if (_isDeleting)
               const Padding(
@@ -77,17 +77,17 @@ class _ViewRacePageState extends State<ViewRacePage> {
       onPressed: () {
         Navigator.of(context).pop(false);
       },
-      child: const Text('Cancel'),
+      child: const Text('Отмена'),
     );
     final Widget continueButton = TextButton(
       onPressed: () {
         Navigator.of(context).pop(true);
       },
-      child: const Text('Delete'),
+      child: const Text('Удалить'),
     );
 
     final AlertDialog alert = AlertDialog(
-      title: const Text('Are you sure you want delete race?'),
+      title: const Text('Вы действительно хотите удалить соревнование?'),
       actions: [
         cancelButton,
         continueButton,

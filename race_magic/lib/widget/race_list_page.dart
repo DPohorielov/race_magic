@@ -10,7 +10,7 @@ class RaceListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Races'),
+        title: const Text('Соревнования'),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

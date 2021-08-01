@@ -1,13 +1,17 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:race_magic/api/repository.dart';
 import 'package:race_magic/model/entity/result_entity.dart';
+import 'package:race_magic/model/enum/categories.dart';
+import 'package:race_magic/model/enum/stages.dart';
 import 'package:race_magic/widget/custom_form_field.dart';
 
 class AddResultTimePage extends StatelessWidget {
   final String raceId;
-  final int stage;
+  final Stages stage;
+  final Categories category;
   final bool isStart;
 
   const AddResultTimePage({
@@ -15,13 +19,14 @@ class AddResultTimePage extends StatelessWidget {
     required this.raceId,
     required this.stage,
     required this.isStart,
+    required this.category,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${isStart ? 'START' : 'FINISH'} Stage $stage'),
+        title: Text('${isStart ? 'СТАРТ' : 'ФИНИШ'} ${stage.name} ${category.name}'),
       ),
       body: SafeArea(
         child: Padding(
@@ -31,8 +36,8 @@ class AddResultTimePage extends StatelessWidget {
               bottom: 20.0,
             ),
             child: isStart
-                ? AddStartResultForm(raceId, stage)
-                : AddFinishResultForm(raceId, stage)),
+                ? AddStartResultForm(raceId, stage, category)
+                : AddFinishResultForm(raceId, stage, category)),
       ),
     );
   }
@@ -40,9 +45,10 @@ class AddResultTimePage extends StatelessWidget {
 
 class AddStartResultForm extends StatefulWidget {
   final String raceId;
-  final int stage;
+  final Stages stage;
+  final Categories category;
 
-  const AddStartResultForm(this.raceId, this.stage);
+  const AddStartResultForm(this.raceId, this.stage, this.category);
 
   @override
   _AddStartResultFormState createState() => _AddStartResultFormState();
@@ -86,7 +92,7 @@ class _AddStartResultFormState extends State<AddStartResultForm> {
               children: [
                 const SizedBox(height: 24.0),
                 const Text(
-                  'Number',
+                  'Номер',
                   style: TextStyle(
                     fontSize: 22.0,
                     letterSpacing: 1,
@@ -100,13 +106,13 @@ class _AddStartResultFormState extends State<AddStartResultForm> {
                   controller: _numberController,
                   keyboardType: TextInputType.number,
                   inputAction: TextInputAction.done,
-                  label: 'Number',
-                  hint: 'Enter racer Number',
+                  label: 'Номер',
+                  hint: 'Введите Номер участника',
                 ),
                 const SizedBox(height: 25.0),
                 Center(
                   child: Text(
-                    _number == null ? '' : 'Racer# $_number',
+                    _number == null ? '' : 'Участник# $_number',
                     style: TextStyle(
                         fontSize: 32.0,
                         letterSpacing: 1,
@@ -117,7 +123,7 @@ class _AddStartResultFormState extends State<AddStartResultForm> {
                 SizedBox(height: _isProcessing ? 31.0 : 20.0),
                 Center(
                   child: Text(
-                    'Current time:',
+                    'Текущее время:',
                     style: TextStyle(
                         fontSize: 25.0,
                         letterSpacing: 1,
@@ -168,6 +174,7 @@ class _AddStartResultFormState extends State<AddStartResultForm> {
                         try {
                           Repository.addResult(
                               ResultEntity(_number!, _time, widget.stage,
+                                  widget.category,
                                   isStart: true),
                               widget.raceId);
                         } catch (_) {}
@@ -182,7 +189,7 @@ class _AddStartResultFormState extends State<AddStartResultForm> {
                 child: const Padding(
                   padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
                   child: Text(
-                    'SAVE',
+                    'СОХРАНИТЬ',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -200,7 +207,6 @@ class _AddStartResultFormState extends State<AddStartResultForm> {
   Widget _buildTime() {
     _time = DateTime.now();
 
-
     return Text(
       buildDateString(_time),
       style: TextStyle(
@@ -214,9 +220,10 @@ class _AddStartResultFormState extends State<AddStartResultForm> {
 
 class AddFinishResultForm extends StatefulWidget {
   final String raceId;
-  final int stage;
+  final Stages stage;
+  final Categories category;
 
-  const AddFinishResultForm(this.raceId, this.stage);
+  const AddFinishResultForm(this.raceId, this.stage, this.category);
 
   @override
   _AddFinishResultFormState createState() => _AddFinishResultFormState();
@@ -262,7 +269,7 @@ class _AddFinishResultFormState extends State<AddFinishResultForm> {
               children: [
                 const SizedBox(height: 24.0),
                 const Text(
-                  'Number',
+                  'Номер',
                   style: TextStyle(
                     fontSize: 22.0,
                     letterSpacing: 1,
@@ -277,13 +284,13 @@ class _AddFinishResultFormState extends State<AddFinishResultForm> {
                   controller: _numberController,
                   keyboardType: TextInputType.number,
                   inputAction: TextInputAction.done,
-                  label: 'Number',
-                  hint: 'Enter racer Number',
+                  label: 'Номер',
+                  hint: 'Введите Номер участника',
                 ),
                 SizedBox(height: _isStopped ? 25.0 : 31),
                 Center(
                   child: Text(
-                    _number == null ? '' : 'Racer# $_number',
+                    _number == null ? '' : 'Участник# $_number',
                     style: TextStyle(
                         fontSize: 32.0,
                         letterSpacing: 1,
@@ -296,7 +303,7 @@ class _AddFinishResultFormState extends State<AddFinishResultForm> {
                 const SizedBox(height: 20.0),
                 Center(
                   child: Text(
-                    'Current time:',
+                    'Текущее время:',
                     style: TextStyle(
                         fontSize: 25.0,
                         letterSpacing: 1,
@@ -350,6 +357,7 @@ class _AddFinishResultFormState extends State<AddFinishResultForm> {
                               try {
                                 Repository.addResult(
                                     ResultEntity(_number!, _time, widget.stage,
+                                        widget.category,
                                         isStart: false),
                                     widget.raceId);
                               } catch (_) {}
@@ -365,7 +373,7 @@ class _AddFinishResultFormState extends State<AddFinishResultForm> {
                       child: const Padding(
                         padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
                         child: Text(
-                          'SAVE',
+                          'СОХРАНИТЬ',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -393,7 +401,7 @@ class _AddFinishResultFormState extends State<AddFinishResultForm> {
                       child: const Padding(
                         padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
                         child: Text(
-                          'FINISH',
+                          'ФИНИШ',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
