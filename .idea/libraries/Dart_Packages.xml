@@ -16,6 +16,13 @@
             </list>
           </value>
         </entry>
+        <entry key="archive">
+          <value>
+            <list>
+              <option value="$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/archive-3.1.2/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="args">
           <value>
             <list>
@@ -188,6 +195,20 @@
           <value>
             <list>
               <option value="$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/dart_style-2.0.2/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="equatable">
+          <value>
+            <list>
+              <option value="$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/equatable-2.0.3/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="excel">
+          <value>
+            <list>
+              <option value="$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/excel-2.0.0-null-safety-3/lib" />
             </list>
           </value>
         </entry>
@@ -387,6 +408,13 @@
             </list>
           </value>
         </entry>
+        <entry key="petitparser">
+          <value>
+            <list>
+              <option value="$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/petitparser-4.1.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="plugin_platform_interface">
           <value>
             <list>
@@ -527,6 +555,13 @@
             </list>
           </value>
         </entry>
+        <entry key="xml">
+          <value>
+            <list>
+              <option value="$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/xml-5.1.2/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="yaml">
           <value>
             <list>
@@ -539,6 +574,7 @@
     <CLASSES>
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/_fe_analyzer_shared-22.0.0/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/analyzer-1.7.1/lib" />
+      <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/archive-3.1.2/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/args-2.1.1/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/async-2.6.1/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0/lib" />
@@ -564,6 +600,8 @@
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/crypto-3.0.1/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.3/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/dart_style-2.0.2/lib" />
+      <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/equatable-2.0.3/lib" />
+      <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/excel-2.0.0-null-safety-3/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.2/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.4.0/lib" />
@@ -589,6 +627,7 @@
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/package_config-2.0.0/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.0/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/pedantic-1.11.1/lib" />
+      <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/petitparser-4.1.0/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.0.1/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/pool-1.5.0/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/pub_semver-2.0.0/lib" />
@@ -608,6 +647,7 @@
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.0/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/watcher-1.0.0/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/web_socket_channel-2.1.0/lib" />
+      <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/xml-5.1.2/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/yaml-3.1.0/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/bin/cache/pkg/sky_engine/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/packages/flutter/lib" />

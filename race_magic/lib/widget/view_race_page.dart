@@ -44,20 +44,41 @@ class _ViewRacePageState extends State<ViewRacePage> {
               ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => AddResultPage(raceId: widget.race.id),
+        floatingActionButton:
+
+        Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FloatingActionButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => AddResultPage(raceId: widget.race.id),
+                    ),
+                  );
+                },
+                child: const Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: 32,
+                ),
               ),
-            );
-          },
-          child: const Icon(
-            Icons.add,
-            color: Colors.white,
-            size: 32,
-          ),
+              SizedBox(
+                height: 25,
+              ),
+              FloatingActionButton(
+                onPressed: () {
+
+                },
+                child: const Icon(
+                  Icons.file_download_outlined,
+                  color: Colors.white,
+                  size: 32,
+                ),
+              ),
+            ]
         ),
+
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.only(
