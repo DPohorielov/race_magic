@@ -76,13 +76,11 @@ class Repository {
     });
   }
 
-  static Stream<List<ResultEntity>> getResults(String raceId) {
-    return _results(raceId).snapshots().map((snapshot) {
-      return snapshot.docs.map((document) {
-        final Map<String, dynamic> json = document.data();
-        return ResultEntity.fromJson(json);
-      }).toList();
-    });
+  static Future<List<ResultEntity>> getResults(String raceId) async {
+    return (await _results(raceId).get())
+        .docs
+        .map((e) => ResultEntity.fromJson(e.data()))
+    .toList();
   }
 
   static Stream<Set<int>> getNumbers(String raceId) {

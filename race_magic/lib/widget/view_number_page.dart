@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:race_magic/api/repository.dart';
 import 'package:race_magic/model/entity/result_entity.dart';
+import 'package:race_magic/model/enum/categories.dart';
 import 'package:race_magic/model/enum/stages.dart';
 
 class ViewNumberPage extends StatefulWidget {
@@ -17,7 +17,7 @@ class ViewNumberPage extends StatefulWidget {
 }
 
 class _ViewNumberPageState extends State<ViewNumberPage> {
-  bool _isDeleting = false;
+  //bool _isDeleting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,8 @@ class _ViewNumberPageState extends State<ViewNumberPage> {
 
     final List<StageResult> stages = [];
     for (int i = 0; i < Stages.values.length; i++) {
-      final result = StageResult.fromList(Stages.values[i], stagesMap[Stages.values[i]]);
+      final result =
+          StageResult.fromList(Stages.values[i], stagesMap[Stages.values[i]]);
       stages.add(result);
     }
 
@@ -46,8 +47,9 @@ class _ViewNumberPageState extends State<ViewNumberPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Участник# ${widget.results.first.number}'),
-    /*    actions: [
+        title: Text(
+            'Участник #${widget.results.first.number} ${widget.results.first.category.name}'),
+        /*    actions: [
           if (_isDeleting)
             const Padding(
               padding: EdgeInsets.only(
@@ -76,7 +78,7 @@ class _ViewNumberPageState extends State<ViewNumberPage> {
               children: [
                 ListView.separated(
                     shrinkWrap: true,
-                    physics:  const NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     separatorBuilder: (context, index) => const Divider(),
                     itemCount: stages.length,
                     itemBuilder: (context, index) {
@@ -138,7 +140,7 @@ class _ViewNumberPageState extends State<ViewNumberPage> {
     );
   }
 
-  void _showDeleteDialog() {
+/*void _showDeleteDialog() {
     final Widget cancelButton = TextButton(
       onPressed: () {
         Navigator.of(context).pop(false);
@@ -179,7 +181,7 @@ class _ViewNumberPageState extends State<ViewNumberPage> {
         Navigator.of(context).pop();
       }
     });
-  }
+  }*/
 }
 
 String _printDuration(Duration duration) {

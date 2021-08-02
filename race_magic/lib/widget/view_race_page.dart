@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:race_magic/api/repository.dart';
 import 'package:race_magic/model/entity/race_entity.dart';
+import 'package:race_magic/model/entity/result_entity.dart';
+import 'package:race_magic/util/xls_helper.dart';
 import 'package:race_magic/widget/add_result_page.dart';
 import 'package:race_magic/widget/view_number_page.dart';
 
@@ -17,6 +19,7 @@ class ViewRacePage extends StatefulWidget {
 
 class _ViewRacePageState extends State<ViewRacePage> {
   bool _isDeleting = false;
+  bool _isGeneratingXls = false;
 
   @override
   Widget build(BuildContext context) {
@@ -45,40 +48,48 @@ class _ViewRacePageState extends State<ViewRacePage> {
           ],
         ),
         floatingActionButton:
-
-        Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              FloatingActionButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => AddResultPage(raceId: widget.race.id),
-                    ),
-                  );
-                },
-                child: const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 32,
+            Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+          FloatingActionButton(
+            heroTag: 'btn0',
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => AddResultPage(raceId: widget.race.id),
                 ),
-              ),
-              SizedBox(
-                height: 25,
-              ),
-              FloatingActionButton(
-                onPressed: () {
+              );
+            },
+            child: const Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 32,
+            ),
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          if (_isGeneratingXls)
+            const CircularProgressIndicator()
+          else
+            FloatingActionButton(
+              heroTag: 'btn1',
+              onPressed: () async {
+                setState(() => _isGeneratingXls = true);
 
-                },
-                child: const Icon(
-                  Icons.file_download_outlined,
-                  color: Colors.white,
-                  size: 32,
-                ),
+                try {
+                  final List<ResultEntity> results =
+                      await Repository.getResults(widget.race.id);
+                  _generateXls(results);
+                } catch (_) {} finally {
+                  setState(() => _isGeneratingXls = false);
+                }
+              },
+              child: const Icon(
+                Icons.file_download_outlined,
+                color: Colors.white,
+                size: 32,
               ),
-            ]
-        ),
-
+            ),
+        ]),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.only(
@@ -133,6 +144,10 @@ class _ViewRacePageState extends State<ViewRacePage> {
         Navigator.of(context).pop();
       }
     });
+  }
+
+  void _generateXls(List<ResultEntity> results) {
+    XlsHelper.generateResults(results);
   }
 }
 

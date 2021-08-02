@@ -112,7 +112,7 @@ class _AddStartResultFormState extends State<AddStartResultForm> {
                 const SizedBox(height: 25.0),
                 Center(
                   child: Text(
-                    _number == null ? '' : 'Участник# $_number',
+                    _number == null ? '' : 'Участник #$_number',
                     style: TextStyle(
                         fontSize: 32.0,
                         letterSpacing: 1,
@@ -290,7 +290,7 @@ class _AddFinishResultFormState extends State<AddFinishResultForm> {
                 SizedBox(height: _isStopped ? 25.0 : 31),
                 Center(
                   child: Text(
-                    _number == null ? '' : 'Участник# $_number',
+                    _number == null ? '' : 'Участник #$_number',
                     style: TextStyle(
                         fontSize: 32.0,
                         letterSpacing: 1,
