@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -7,6 +9,7 @@ import 'package:race_magic/model/entity/result_entity.dart';
 import 'package:race_magic/util/xls_helper.dart';
 import 'package:race_magic/widget/add_result_page.dart';
 import 'package:race_magic/widget/view_number_page.dart';
+import 'package:share/share.dart';
 
 class ViewRacePage extends StatefulWidget {
   final RaceEntity race;
@@ -78,8 +81,10 @@ class _ViewRacePageState extends State<ViewRacePage> {
                 try {
                   final List<ResultEntity> results =
                       await Repository.getResults(widget.race.id);
-                  _generateXls(results);
-                } catch (_) {} finally {
+                  await _generateXls(results);
+                } catch (_) {
+                  print(_);
+                } finally {
                   setState(() => _isGeneratingXls = false);
                 }
               },
@@ -146,8 +151,9 @@ class _ViewRacePageState extends State<ViewRacePage> {
     });
   }
 
-  void _generateXls(List<ResultEntity> results) {
-    XlsHelper.generateResults(results);
+  Future<void> _generateXls(List<ResultEntity> results) async {
+    final File file = await XlsHelper.generateResults(results);
+    Share.shareFiles([file.path]);
   }
 }
 

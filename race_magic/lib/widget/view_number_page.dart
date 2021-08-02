@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:race_magic/model/entity/result_entity.dart';
 import 'package:race_magic/model/enum/categories.dart';
 import 'package:race_magic/model/enum/stages.dart';
+import 'package:race_magic/util/xls_helper.dart';
 
 class ViewNumberPage extends StatefulWidget {
   final List<ResultEntity> results;
@@ -97,7 +97,7 @@ class _ViewNumberPageState extends State<ViewNumberPage> {
                             ),
                             if (time != null)
                               Text(
-                                'Длительность: ${_printDuration(time)}',
+                                'Длительность: ${XlsHelper.printDuration(time)}',
                                 style: const TextStyle(
                                   fontSize: 16.0,
                                   letterSpacing: 1,
@@ -106,7 +106,7 @@ class _ViewNumberPageState extends State<ViewNumberPage> {
                               ),
                             const SizedBox(height: 6.0),
                             Text(
-                              'Время Старта: ${stageResult.start == null ? '' : ' ${buildDateString(stageResult.start!)}'}',
+                              'Время Старта: ${stageResult.start == null ? '' : ' ${XlsHelper.buildDateString(stageResult.start!)}'}',
                               style: const TextStyle(
                                 fontSize: 16.0,
                                 letterSpacing: 1,
@@ -114,7 +114,7 @@ class _ViewNumberPageState extends State<ViewNumberPage> {
                             ),
                             const SizedBox(height: 6.0),
                             Text(
-                              'Время Финиша: ${stageResult.finish == null ? '' : ' ${buildDateString(stageResult.finish!)}'}',
+                              'Время Финиша: ${stageResult.finish == null ? '' : ' ${XlsHelper.buildDateString(stageResult.finish!)}'}',
                               style: const TextStyle(
                                 fontSize: 16.0,
                                 letterSpacing: 1,
@@ -125,7 +125,7 @@ class _ViewNumberPageState extends State<ViewNumberPage> {
                 const Divider(),
                 const SizedBox(height: 6.0),
                 Text(
-                  'Общая Длительность: ${_printDuration(total)}',
+                  'Общая Длительность: ${XlsHelper.printDuration(total)}',
                   style: const TextStyle(
                     fontSize: 24.0,
                     letterSpacing: 1,
@@ -182,27 +182,6 @@ class _ViewNumberPageState extends State<ViewNumberPage> {
       }
     });
   }*/
-}
-
-String _printDuration(Duration duration) {
-  return duration.inMilliseconds == 0
-      ? '0'
-      : '${duration.inMinutes}:${duration.inSeconds.remainder(60)}.${duration.inMilliseconds.remainder(1000)}';
-}
-
-String buildDateString(DateTime time) {
-  final int ms = time.millisecond;
-
-  final StringBuffer msString = StringBuffer();
-
-  if (ms < 10) {
-    msString.write('0');
-  }
-  if (ms < 100) {
-    msString.write('0');
-  }
-  msString.write(ms);
-  return '${DateFormat('hh:mm:ss').format(time)}.$msString';
 }
 
 class StageResult {
