@@ -1,17 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:race_magic/api/repository.dart';
 import 'package:race_magic/model/entity/result_entity.dart';
-import 'package:race_magic/model/enum/categories.dart';
 import 'package:race_magic/model/enum/stages.dart';
+import 'package:race_magic/util/xls_helper.dart';
 import 'package:race_magic/widget/custom_form_field.dart';
 
 class AddResultTimePage extends StatelessWidget {
   final String raceId;
   final Stages stage;
-  final Categories category;
   final bool isStart;
 
   const AddResultTimePage({
@@ -19,14 +17,13 @@ class AddResultTimePage extends StatelessWidget {
     required this.raceId,
     required this.stage,
     required this.isStart,
-    required this.category,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${isStart ? 'СТАРТ' : 'ФИНИШ'} ${stage.name} ${category.name}'),
+        title: Text('${isStart ? 'СТАРТ' : 'ФИНИШ'} ${stage.name}'),
       ),
       body: SafeArea(
         child: Padding(
@@ -36,19 +33,67 @@ class AddResultTimePage extends StatelessWidget {
               bottom: 20.0,
             ),
             child: isStart
-                ? AddStartResultForm(raceId, stage, category)
-                : AddFinishResultForm(raceId, stage, category)),
+                ? AddStartResultForm(
+                    stage, (result) => onResult(result, context))
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                        AddFinishResultForm(
+                            stage, (result) => onResult(result, context)),
+                        const Expanded(
+                            child: Divider(
+                          color: Colors.black54,
+                          thickness: 10,
+                        )),
+                        AddFinishResultForm(
+                            stage, (result) => onResult(result, context)),
+                      ])),
       ),
     );
+  }
+
+  Future<void> onResult(ResultEntity resultEntity, BuildContext context) async {
+    final bool success = await Repository.addResult(resultEntity, raceId);
+
+    if (!success) {
+      final Widget cancelButton = TextButton(
+        onPressed: () {
+          Navigator.of(context).pop(false);
+        },
+        child: const Text('Отмена'),
+      );
+      final Widget continueButton = TextButton(
+        onPressed: () {
+          Navigator.of(context).pop(true);
+        },
+        child: const Text('Да'),
+      );
+
+      final AlertDialog alert = AlertDialog(
+        title: const Text('Замер уже существует. Хотите перезаписать?'),
+        actions: [
+          cancelButton,
+          continueButton,
+        ],
+      );
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => alert,
+      ).then((value) async {
+        if (value is bool && value) {
+          await Repository.saveOrUpdateResult(resultEntity, raceId);
+        }
+      });
+    }
   }
 }
 
 class AddStartResultForm extends StatefulWidget {
-  final String raceId;
   final Stages stage;
-  final Categories category;
+  final Function(ResultEntity) onResult;
 
-  const AddStartResultForm(this.raceId, this.stage, this.category);
+  const AddStartResultForm(this.stage, this.onResult);
 
   @override
   _AddStartResultFormState createState() => _AddStartResultFormState();
@@ -172,11 +217,9 @@ class _AddStartResultFormState extends State<AddStartResultForm> {
                         });
 
                         try {
-                          Repository.addResult(
-                              ResultEntity(_number!, _time, widget.stage,
-                                  widget.category,
-                                  isStart: true),
-                              widget.raceId);
+                          widget.onResult.call(ResultEntity(
+                              _number!, _time, widget.stage,
+                              isStart: true));
                         } catch (_) {}
 
                         Future.delayed(const Duration(seconds: 5), () {
@@ -208,7 +251,7 @@ class _AddStartResultFormState extends State<AddStartResultForm> {
     _time = DateTime.now();
 
     return Text(
-      buildDateString(_time),
+      XlsHelper.buildDateString(_time),
       style: TextStyle(
           fontSize: 35,
           fontWeight: FontWeight.bold,
@@ -219,11 +262,10 @@ class _AddStartResultFormState extends State<AddStartResultForm> {
 }
 
 class AddFinishResultForm extends StatefulWidget {
-  final String raceId;
   final Stages stage;
-  final Categories category;
+  final Function(ResultEntity) onResult;
 
-  const AddFinishResultForm(this.raceId, this.stage, this.category);
+  const AddFinishResultForm(this.stage, this.onResult);
 
   @override
   _AddFinishResultFormState createState() => _AddFinishResultFormState();
@@ -255,77 +297,75 @@ class _AddFinishResultFormState extends State<AddFinishResultForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 28.0,
+        right: 28.0,
+        bottom: 8.0,
+        top: 15,
+      ),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 8.0,
-              right: 8.0,
-              bottom: 24.0,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 24.0),
-                const Text(
-                  'Номер',
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Номер',
+                style: TextStyle(
+                  fontSize: 22.0,
+                  letterSpacing: 1,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              CustomFormField(
+                focusNode: _numberFocus,
+                enabled: _isStopped && !_isProcessing,
+                isLabelEnabled: false,
+                controller: _numberController,
+                keyboardType: TextInputType.number,
+                inputAction: TextInputAction.done,
+                label: 'Номер',
+                hint: 'Введите Номер участника',
+              ),
+              SizedBox(height: _isStopped ? 5.0 : 11),
+              Center(
+                child: Text(
+                  _number == null ? '' : 'Участник #$_number',
                   style: TextStyle(
-                    fontSize: 22.0,
-                    letterSpacing: 1,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      fontSize: 32.0,
+                      letterSpacing: 1,
+                      fontWeight: FontWeight.bold,
+                      color: _isProcessing || _isStopped
+                          ? Colors.red
+                          : Colors.black),
                 ),
-                const SizedBox(height: 8.0),
-                CustomFormField(
-                  focusNode: _numberFocus,
-                  enabled: _isStopped && !_isProcessing,
-                  isLabelEnabled: false,
-                  controller: _numberController,
-                  keyboardType: TextInputType.number,
-                  inputAction: TextInputAction.done,
-                  label: 'Номер',
-                  hint: 'Введите Номер участника',
+              ),
+              const SizedBox(height: 6.0),
+              Center(
+                child: Text(
+                  'Текущее время:',
+                  style: TextStyle(
+                      fontSize: 25.0,
+                      letterSpacing: 1,
+                      fontWeight: FontWeight.bold,
+                      color: _isProcessing || _isStopped
+                          ? Colors.red
+                          : Colors.black),
                 ),
-                SizedBox(height: _isStopped ? 25.0 : 31),
-                Center(
-                  child: Text(
-                    _number == null ? '' : 'Участник #$_number',
-                    style: TextStyle(
-                        fontSize: 32.0,
-                        letterSpacing: 1,
-                        fontWeight: FontWeight.bold,
-                        color: _isProcessing || _isStopped
-                            ? Colors.red
-                            : Colors.black),
-                  ),
-                ),
-                const SizedBox(height: 20.0),
-                Center(
-                  child: Text(
-                    'Текущее время:',
-                    style: TextStyle(
-                        fontSize: 25.0,
-                        letterSpacing: 1,
-                        fontWeight: FontWeight.bold,
-                        color: _isProcessing || _isStopped
-                            ? Colors.red
-                            : Colors.black),
-                  ),
-                ),
-                Center(
-                  child: _isProcessing || _isStopped
-                      ? _buildTime()
-                      : StreamBuilder(
-                          stream:
-                              Stream.periodic(const Duration(milliseconds: 1)),
-                          builder: (context, snapshot) => _buildTime(),
-                        ),
-                ),
-              ],
-            ),
+              ),
+              Center(
+                child: _isProcessing || _isStopped
+                    ? _buildTime()
+                    : StreamBuilder(
+                        stream:
+                            Stream.periodic(const Duration(milliseconds: 1)),
+                        builder: (context, snapshot) => _buildTime(),
+                      ),
+              ),
+            ],
           ),
-          const SizedBox(height: 40.0),
+          const SizedBox(height: 6.0),
           if (_isProcessing)
             const Padding(
               padding: EdgeInsets.all(16.0),
@@ -350,16 +390,16 @@ class _AddFinishResultFormState extends State<AddFinishResultForm> {
                       onPressed: _number == null
                           ? null
                           : () async {
+                              FocusScope.of(context).unfocus();
+
                               setState(() {
                                 _isProcessing = true;
                               });
 
                               try {
-                                Repository.addResult(
-                                    ResultEntity(_number!, _time, widget.stage,
-                                        widget.category,
-                                        isStart: false),
-                                    widget.raceId);
+                                widget.onResult.call(ResultEntity(
+                                    _number!, _time, widget.stage,
+                                    isStart: false));
                               } catch (_) {}
 
                               Future.delayed(const Duration(seconds: 5), () {
@@ -393,6 +433,8 @@ class _AddFinishResultFormState extends State<AddFinishResultForm> {
                       onPressed: _isStopped || _isProcessing
                           ? null
                           : () async {
+                              FocusScope.of(context).unfocus();
+
                               setState(() {
                                 _isStopped = true;
                                 _numberFocus.requestFocus();
@@ -422,7 +464,7 @@ class _AddFinishResultFormState extends State<AddFinishResultForm> {
     }
 
     return Text(
-      buildDateString(_time),
+      XlsHelper.buildDateString(_time),
       style: TextStyle(
           fontSize: 35,
           fontWeight: FontWeight.bold,
@@ -430,19 +472,4 @@ class _AddFinishResultFormState extends State<AddFinishResultForm> {
           color: _isProcessing || _isStopped ? Colors.red : Colors.black),
     );
   }
-}
-
-String buildDateString(DateTime time) {
-  final int ms = time.millisecond;
-
-  final StringBuffer msString = StringBuffer();
-
-  if (ms < 10) {
-    msString.write('0');
-  }
-  if (ms < 100) {
-    msString.write('0');
-  }
-  msString.write(ms);
-  return '${DateFormat('hh:mm:ss').format(time)}.$msString';
 }

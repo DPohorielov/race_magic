@@ -11,7 +11,6 @@ ResultEntity _$ResultEntityFromJson(Map<String, dynamic> json) {
     json['number'] as int,
     DateTime.parse(json['time'] as String),
     _$enumDecode(_$StagesEnumMap, json['stage']),
-    _$enumDecode(_$CategoriesEnumMap, json['category']),
     isStart: json['isStart'] as bool,
   );
 }
@@ -19,7 +18,6 @@ ResultEntity _$ResultEntityFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$ResultEntityToJson(ResultEntity instance) =>
     <String, dynamic>{
       'stage': _$StagesEnumMap[instance.stage],
-      'category': _$CategoriesEnumMap[instance.category],
       'number': instance.number,
       'time': instance.time.toIso8601String(),
       'isStart': instance.isStart,
@@ -56,11 +54,4 @@ const _$StagesEnumMap = {
   Stages.stage1: 1,
   Stages.stage2: 2,
   Stages.stage3: 3,
-};
-
-const _$CategoriesEnumMap = {
-  Categories.elite: 0,
-  Categories.masters: 1,
-  Categories.women: 2,
-  Categories.ebike: 3,
 };

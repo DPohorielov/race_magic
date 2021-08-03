@@ -5,7 +5,6 @@ import 'package:excel/excel.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:race_magic/model/entity/result_entity.dart';
-import 'package:race_magic/model/enum/categories.dart';
 import 'package:race_magic/model/enum/stages.dart';
 import 'package:race_magic/util/data_format_helper.dart';
 
@@ -13,41 +12,30 @@ class XlsHelper {
   XlsHelper._();
 
   static Future<File> generateResults(List<ResultEntity> results) async {
-    final List<CategoryEntry> categories = DataFormatHelper.buildTree(results);
+    final List<RacerEntry> racers = DataFormatHelper.buildTree(results);
     final Excel excel = Excel.createExcel();
 
-    for (final Categories category in Categories.values) {
-      final Sheet sh = excel[category.name];
-      int column = 0;
-      _addHeader(sh, column++, 'Номер');
-      _addHeader(sh, column++, 'Категория');
-      for (final Stages stage in Stages.values) {
-        _addHeader(sh, column++, '${stage.name} Время Старта');
-        _addHeader(sh, column++, '${stage.name} Время Финиша');
-        _addHeader(sh, column++, '${stage.name} Длительность');
-      }
-      _addHeader(sh, column++, 'Общая длительность');
-
-      final CategoryEntry? categoryEntry = categories
-          .firstWhereOrNull((element) => element.category == category);
-      if (categoryEntry != null) {
-        int row = 1;
-        for (final RacerEntry racerEntry in categoryEntry.racers) {
-          _addRacer(sh, row++, racerEntry, category);
-        }
-      }
+    final Sheet sh = excel.sheets.values.first;
+    int column = 0;
+    _addHeader(sh, column++, 'Номер');
+    for (final Stages stage in Stages.values) {
+      _addHeader(sh, column++, '${stage.name} Время Старта');
+      _addHeader(sh, column++, '${stage.name} Время Финиша');
+      _addHeader(sh, column++, '${stage.name} Длительность');
     }
+    _addHeader(sh, column++, 'Общая длительность');
 
-    excel.delete('Sheet1');
+    int row = 1;
+    for (final RacerEntry racerEntry in racers) {
+      _addRacer(sh, row++, racerEntry);
+    }
 
     return _saveToFile(excel.save());
   }
 
-  static void _addRacer(
-      Sheet sheet, int row, RacerEntry racerEntry, Categories category) {
+  static void _addRacer(Sheet sheet, int row, RacerEntry racerEntry) {
     int column = 0;
     _addData(sheet, column++, row, '${racerEntry.number}');
-    _addData(sheet, column++, row, category.name);
 
     for (final Stages stage in Stages.values) {
       final StageEntry? stageEntry = racerEntry.stages
@@ -117,6 +105,7 @@ class XlsHelper {
       msString.write('0');
     }
     msString.write(ms);
-    return '${DateFormat('hh:mm:ss').format(time)}.$msString';
+    return '${DateFormat('HH:mm:ss').format(time)}.$msString';
   }
+
 }

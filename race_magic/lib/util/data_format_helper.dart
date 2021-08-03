@@ -1,27 +1,20 @@
 import 'package:collection/collection.dart';
 import 'package:race_magic/model/entity/result_entity.dart';
-import 'package:race_magic/model/enum/categories.dart';
 import 'package:race_magic/model/enum/stages.dart';
 
 class DataFormatHelper {
   DataFormatHelper._();
 
-  static List<CategoryEntry> buildTree(List<ResultEntity> results,
-      {bool sortByTotal = true}) {
-    final List<CategoryEntry> tree = [];
+  static List<RacerEntry> buildTree(List<ResultEntity> results,
+      {bool sortByNumbers = true}) {
+    final List<RacerEntry> tree = [];
     for (final ResultEntity result in results) {
-      CategoryEntry? categoryEntry = tree
-          .firstWhereOrNull((element) => element.category == result.category);
-      if (categoryEntry == null) {
-        categoryEntry = CategoryEntry(result.category);
-        tree.add(categoryEntry);
-      }
 
-      RacerEntry? racerEntry = categoryEntry.racers
+      RacerEntry? racerEntry = tree
           .firstWhereOrNull((element) => element.number == result.number);
       if (racerEntry == null) {
         racerEntry = RacerEntry(result.number);
-        categoryEntry.racers.add(racerEntry);
+        tree.add(racerEntry);
       }
 
       StageEntry? stageEntry = racerEntry.stages
@@ -37,22 +30,14 @@ class DataFormatHelper {
       }
     }
 
-    if (sortByTotal) {
-      for(final CategoryEntry categoryEntry in tree) {
-        categoryEntry.racers.sort((a, b) => a.totalTime.compareTo(b.totalTime));
-      }
+    if (sortByNumbers) {
+      tree.sort((a, b) => a.number.compareTo(b.number));
     }
 
     return tree;
   }
 }
 
-class CategoryEntry {
-  final Categories category;
-  final List<RacerEntry> racers = [];
-
-  CategoryEntry(this.category);
-}
 
 class RacerEntry {
   final int number;

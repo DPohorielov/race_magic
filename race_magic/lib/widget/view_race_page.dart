@@ -83,7 +83,6 @@ class _ViewRacePageState extends State<ViewRacePage> {
                       await Repository.getResults(widget.race.id);
                   await _generateXls(results);
                 } catch (_) {
-                  print(_);
                 } finally {
                   setState(() => _isGeneratingXls = false);
                 }

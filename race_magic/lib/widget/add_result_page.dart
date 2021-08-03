@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:race_magic/model/enum/categories.dart';
 import 'package:race_magic/model/enum/stages.dart';
 import 'package:race_magic/widget/add_result_time_page.dart';
 
@@ -43,63 +42,34 @@ class AddResultForm extends StatefulWidget {
 
 class _AddResultFormState extends State<AddResultForm> {
   Stages? _stage;
-  Categories? _category;
   bool? _isStart;
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-            Flexible(
-              flex: 10,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 6.0),
-                    const Text(
-                      'Участок',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        letterSpacing: 1,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    _buildStages(),
-                    const SizedBox(height: 6.0),
-                    const Text(
-                      'Тип',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        letterSpacing: 1,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    _buildTypes(),
-                  ],
-                ),
-              ),
-              Flexible(
-                flex: 9,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 6.0),
-                    const Text(
-                      'Категория',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        letterSpacing: 1,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    _buildCategories(),
-                  ],
-                ),
-              ),
-            ]),
+          const SizedBox(height: 6.0),
+          const Text(
+            'Участок',
+            style: TextStyle(
+              fontSize: 20.0,
+              letterSpacing: 1,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          _buildStages(),
+          const SizedBox(height: 6.0),
+          const Text(
+            'Тип',
+            style: TextStyle(
+              fontSize: 20.0,
+              letterSpacing: 1,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          _buildTypes(),
           SizedBox(
             width: double.maxFinite,
             child: ElevatedButton(
@@ -110,7 +80,7 @@ class _AddResultFormState extends State<AddResultForm> {
                   ),
                 ),
               ),
-              onPressed: _isStart == null || _stage == null || _category == null
+              onPressed: _isStart == null || _stage == null
                   ? null
                   : () => _showViewDialog(),
               child: const Padding(
@@ -145,27 +115,6 @@ class _AddResultFormState extends State<AddResultForm> {
               onChanged: (Stages? value) {
                 setState(() {
                   _stage = value;
-                });
-              },
-            ),
-          );
-        });
-  }
-
-  Widget _buildCategories() {
-    return ListView.builder(
-        itemCount: Categories.values.length,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, i) {
-          return ListTile(
-            title: Text(Categories.values[i].name),
-            leading: Radio<Categories>(
-              value: Categories.values[i],
-              groupValue: _category,
-              onChanged: (Categories? value) {
-                setState(() {
-                  _category = value;
                 });
               },
             ),
@@ -221,8 +170,7 @@ class _AddResultFormState extends State<AddResultForm> {
     final AlertDialog alert = AlertDialog(
       title: Text('Вы действительно хотите сделать замер '
           '${_isStart! ? 'Старта' : 'Финиша'}  '
-          '${_stage!.name} '
-          'категория ${_category!.name}?'),
+          '${_stage!.name}?'),
       actions: [
         cancelButton,
         continueButton,
@@ -240,7 +188,6 @@ class _AddResultFormState extends State<AddResultForm> {
               raceId: widget.raceId,
               isStart: _isStart!,
               stage: _stage!,
-              category: _category!,
             ),
           ),
         );

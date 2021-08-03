@@ -3,7 +3,6 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:race_magic/model/entity/race_entity.dart';
 import 'package:race_magic/model/entity/result_entity.dart';
-import 'package:race_magic/model/enum/categories.dart';
 import 'package:race_magic/model/enum/stages.dart';
 
 class Repository {
@@ -55,14 +54,38 @@ class Repository {
     }
   }
 
-  static Future<void> addResult(
+  static Future<bool> addResult(
+      ResultEntity resultEntity, String raceId) async {
+    final Map<String, dynamic> json = resultEntity.toJson();
+
+    late final bool exists;
+
+    await _results(raceId)
+        .where('number', isEqualTo: resultEntity.number)
+        .where('stage', isEqualTo: resultEntity.stage.val)
+        .where('isStart', isEqualTo: resultEntity.isStart)
+        .get()
+        .then((event) async {
+      exists = event.docs.isNotEmpty;
+      /*  final String id = event.docs.single.id;
+        final DocumentReference documentReferencer = _results(raceId).doc(id);
+        await documentReferencer.update(json);*/
+    });
+
+    if (!exists) {
+      _results(raceId).add(json);
+    }
+
+    return !exists;
+  }
+
+  static Future<void> saveOrUpdateResult(
       ResultEntity resultEntity, String raceId) async {
     final Map<String, dynamic> json = resultEntity.toJson();
 
     await _results(raceId)
         .where('number', isEqualTo: resultEntity.number)
         .where('stage', isEqualTo: resultEntity.stage.val)
-        .where('category', isEqualTo: resultEntity.category.val)
         .where('isStart', isEqualTo: resultEntity.isStart)
         .get()
         .then((event) async {
@@ -80,7 +103,7 @@ class Repository {
     return (await _results(raceId).get())
         .docs
         .map((e) => ResultEntity.fromJson(e.data()))
-    .toList();
+        .toList();
   }
 
   static Stream<Set<int>> getNumbers(String raceId) {

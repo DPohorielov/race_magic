@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:race_magic/model/entity/result_entity.dart';
-import 'package:race_magic/model/enum/categories.dart';
 import 'package:race_magic/model/enum/stages.dart';
 import 'package:race_magic/util/xls_helper.dart';
 
@@ -48,7 +47,7 @@ class _ViewNumberPageState extends State<ViewNumberPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            'Участник #${widget.results.first.number} ${widget.results.first.category.name}'),
+            'Участник #${widget.results.first.number}'),
         /*    actions: [
           if (_isDeleting)
             const Padding(
