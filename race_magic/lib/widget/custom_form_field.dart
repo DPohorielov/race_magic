@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CustomFormField extends StatelessWidget {
   const CustomFormField({
     Key? key,
-    required TextEditingController controller,
+    TextEditingController? controller,
     required TextInputType keyboardType,
     required TextInputAction inputAction,
     required String label,
@@ -14,6 +14,7 @@ class CustomFormField extends StatelessWidget {
     this.isLabelEnabled = true,
     this.enabled = true,
     this.focusNode,
+    this.onChanged,
   })  : _emailController = controller,
         _keyboardtype = keyboardType,
         _inputAction = inputAction,
@@ -21,7 +22,7 @@ class CustomFormField extends StatelessWidget {
         _hint = hint,
         super(key: key);
 
-  final TextEditingController _emailController;
+  final TextEditingController? _emailController;
   final TextInputType _keyboardtype;
   final TextInputAction _inputAction;
   final String _label;
@@ -32,10 +33,13 @@ class CustomFormField extends StatelessWidget {
   final bool isLabelEnabled;
   final bool enabled;
   final FocusNode? focusNode;
+  final     ValueChanged<String>? onChanged;
+
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onChanged: onChanged,
       enabled: enabled,
       focusNode: focusNode,
       maxLines: maxLines,

@@ -7,7 +7,7 @@ import 'package:race_magic/model/enum/stages.dart';
 import 'package:race_magic/util/xls_helper.dart';
 import 'package:race_magic/widget/custom_form_field.dart';
 
-class AddResultTimePage extends StatelessWidget {
+class AddResultTimePage extends StatefulWidget {
   final String raceId;
   final Stages stage;
   final bool isStart;
@@ -20,10 +20,18 @@ class AddResultTimePage extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _AddResultTimePageState createState() => _AddResultTimePageState();
+}
+
+class _AddResultTimePageState extends State<AddResultTimePage> {
+  int? _number;
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${isStart ? 'СТАРТ' : 'ФИНИШ'} ${stage.name}'),
+        title:
+            Text('${widget.isStart ? 'СТАРТ' : 'ФИНИШ'} ${widget.stage.name}'),
       ),
       body: SafeArea(
         child: Padding(
@@ -32,28 +40,29 @@ class AddResultTimePage extends StatelessWidget {
               right: 16.0,
               bottom: 20.0,
             ),
-            child: isStart
+            child: widget.isStart
                 ? AddStartResultForm(
-                    stage, (result) => onResult(result, context))
+                    widget.stage, (result) => onResult(result, context))
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                        AddFinishResultForm(
-                            stage, (result) => onResult(result, context)),
+                        AddFinishResultForm(widget.stage,
+                            (result) => onResult(result, context)),
                         const Expanded(
                             child: Divider(
                           color: Colors.black54,
                           thickness: 10,
                         )),
-                        AddFinishResultForm(
-                            stage, (result) => onResult(result, context)),
+                        AddFinishResultForm(widget.stage,
+                            (result) => onResult(result, context)),
                       ])),
       ),
     );
   }
 
   Future<void> onResult(ResultEntity resultEntity, BuildContext context) async {
-    final bool success = await Repository.addResult(resultEntity, raceId);
+    final bool success =
+        await Repository.addResult(resultEntity, widget.raceId);
 
     if (!success) {
       final Widget cancelButton = TextButton(
@@ -68,12 +77,19 @@ class AddResultTimePage extends StatelessWidget {
         },
         child: const Text('Да'),
       );
+      final Widget changeButton = TextButton(
+        onPressed: () {
+          _showChangeDialog(resultEntity, context);
+        },
+        child: const Text('Изменить'),
+      );
 
       final AlertDialog alert = AlertDialog(
         title: const Text('Замер уже существует. Хотите перезаписать?'),
         actions: [
-          cancelButton,
           continueButton,
+          changeButton,
+          cancelButton,
         ],
       );
 
@@ -82,10 +98,63 @@ class AddResultTimePage extends StatelessWidget {
         builder: (BuildContext context) => alert,
       ).then((value) async {
         if (value is bool && value) {
-          await Repository.saveOrUpdateResult(resultEntity, raceId);
+          await Repository.saveOrUpdateResult(resultEntity, widget.raceId);
         }
       });
     }
+  }
+
+  void _showChangeDialog(ResultEntity resultEntity, BuildContext context) {
+    _number = null;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) =>
+          StatefulBuilder(builder: (context, setState) {
+        return AlertDialog(
+          title: const Text('Введите верный номер'),
+          content: CustomFormField(
+            isLabelEnabled: false,
+            onChanged: (val) {
+              setState(() {
+                try {
+                  _number = int.parse(val);
+                } catch (_) {
+                  _number = null;
+                }
+              });
+            },
+            keyboardType: TextInputType.number,
+            inputAction: TextInputAction.done,
+            label: 'Номер',
+            hint: 'Введите Номер участника',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: const Text('Отмена'),
+            ),
+            TextButton(
+              onPressed: _number == null
+                  ? null
+                  : () {
+                Navigator.of(context).pop(true);
+                Navigator.of(context).pop(true);
+              },
+              child: const Text('Да'),
+            ),
+          ],
+        );
+      }),
+    ).then((value) async {
+      if (value is bool && value) {
+        await Repository.saveOrUpdateResult(
+            ResultEntity(_number!, resultEntity.time, resultEntity.stage,
+                isStart: resultEntity.isStart),
+            widget.raceId);
+      }
+    });
   }
 }
 
