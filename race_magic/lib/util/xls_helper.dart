@@ -90,7 +90,7 @@ class XlsHelper {
   static String printDuration(Duration duration) {
     return duration.inMilliseconds == 0
         ? '0'
-        : '${duration.inMinutes}:${duration.inSeconds.remainder(60)}.${duration.inMilliseconds.remainder(1000)}';
+        : '${duration.inMinutes}:${duration.inSeconds.remainder(60).toString().padLeft(2, '0')}.${duration.inMilliseconds.remainder(1000).toString().padLeft(3, '0')}';
   }
 
   static String buildDateString(DateTime time) {

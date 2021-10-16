@@ -12,7 +12,7 @@
         <entry key="analyzer">
           <value>
             <list>
-              <option value="$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/analyzer-1.7.1/lib" />
+              <option value="$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/analyzer-1.7.2/lib" />
             </list>
           </value>
         </entry>
@@ -33,7 +33,7 @@
         <entry key="async">
           <value>
             <list>
-              <option value="$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/async-2.6.1/lib" />
+              <option value="$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.1/lib" />
             </list>
           </value>
         </entry>
@@ -110,7 +110,7 @@
         <entry key="charcode">
           <value>
             <list>
-              <option value="$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.2.0/lib" />
+              <option value="$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.3.1/lib" />
             </list>
           </value>
         </entry>
@@ -383,7 +383,7 @@
         <entry key="meta">
           <value>
             <list>
-              <option value="$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/meta-1.3.0/lib" />
+              <option value="$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/meta-1.7.0/lib" />
             </list>
           </value>
         </entry>
@@ -579,7 +579,7 @@
         <entry key="test_api">
           <value>
             <list>
-              <option value="$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.3.0/lib" />
+              <option value="$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.2/lib" />
             </list>
           </value>
         </entry>
@@ -650,10 +650,10 @@
     </properties>
     <CLASSES>
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/_fe_analyzer_shared-22.0.0/lib" />
-      <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/analyzer-1.7.1/lib" />
+      <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/analyzer-1.7.2/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/archive-3.1.2/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/args-2.1.1/lib" />
-      <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/async-2.6.1/lib" />
+      <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.1/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/build-2.0.3/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/build_config-1.0.0/lib" />
@@ -664,7 +664,7 @@
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/built_collection-5.1.0/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/built_value-8.1.1/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.1.0/lib" />
-      <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.2.0/lib" />
+      <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.3.1/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/checked_yaml-2.0.1/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/cli_util-0.3.3/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/clock-1.1.0/lib" />
@@ -700,7 +700,7 @@
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/loader_overlay-2.0.2/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/logging-1.0.1/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.10/lib" />
-      <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/meta-1.3.0/lib" />
+      <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/meta-1.7.0/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/mime-1.0.0/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/package_config-2.0.0/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.0/lib" />
@@ -727,7 +727,7 @@
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/stream_transform-2.0.0/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/string_scanner-1.1.0/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/term_glyph-1.2.0/lib" />
-      <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.3.0/lib" />
+      <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.2/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/timing-1.0.0/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/typed_data-1.3.0/lib" />
       <root url="file://$USER_HOME$/Library/Flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.0/lib" />
